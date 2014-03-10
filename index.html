@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>reveal.js - The HTML Presentation Framework</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+		<script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = 'css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section data-background-transition="slide">
+					<h2>Modernizing Your WordPress Workflow</h2>
+					<h1>with Grunt &amp; Bower</h1>
+
+					<aside class="notes">
+						There are a ton of new tools that can help us be more productive and can make our projects more fun. Using Bower to keep our plugins up to date and Grunt for task management, we can spend more time on what's important - building great websites and apps.
+					</aside>
+				</section>
+
+				<section data-background-transition="slide">
+					<h2>What We'll Cover</h2>
+					<ul>
+						<li class="fragment">Getting used to the terminal</li>
+						<li class="fragment">Managing project plugins &amp; frameworks with Bower</li>
+						<li class="fragment">Creating tasks in Grunt that will process our CSS, minify and concatenate our JavaScript, optimize images, and refresh our browser instantly</li>
+					</ul>
+					<aside class="notes">
+						Grunt and Bower exist as toolkits to solve common problems for developers.
+					</aside>
+				</section>
+
+				<!-- Example of nested vertical slides -->
+				<section>
+					<section>
+						<h2>Common Problems<br> for Theme Developers</h2>
+						<ul>
+							<li class="fragment">HTML / Template Management</li>
+							<li class="fragment">CSS Management</li>
+							<li class="fragment">JavaScript Management</li>
+							<li class="fragment">CSS / JavaScript Concatenation / Minification</li>
+							<li class="fragment">Image Optimization</li>
+							<li class="fragment">Live Browser Updating</li>
+							<li class="fragment">Local Server Environment</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Tools to Help with These Problems</h2>
+						<ul>
+							<li class="fragment">HAML, JADE, SLIM, Markdown</li>
+							<li class="fragment">LESS, SASS, Stylus</li>
+							<li class="fragment">CoffeeScript, LiveScript</li>
+							<li class="fragment">WordPress Plugins, GUI Apps - CodeKit, Koala, Hammer</li>
+							<li class="fragment">MAMP, LAMP, XAMPP</li>
+						</ul>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Problems Bower Solves</h2>
+						<p class="fragment">
+							JavaScript Plugin / Framework Management &amp; Updating
+						</p>
+					</section>
+					<section>
+						<h2>Problems Grunt Solves</h2>
+						<p class="fragment">
+							All the Rest
+						</p>
+					</section>
+				</section>
+
+				<section>
+					<h2>Grunt Advantages Over GUIs</h2>
+					<ul>
+						<li class="fragment">Portable with Project</li>
+						<li class="fragment">Configurable for Multiple Environments (dev, dist)</li>
+						<li class="fragment">Every Detail is Customizable</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Folder Structure</h2>
+					<pre><code class="json" data-trim>
+html             // your public folder
+assets           // the files you will be editing
+└─ less
+└─ js
+└─ img
+bower_components // home to your Bower packages
+node_modules     // home to your Node packages
+tmp              // holds concatenated js to lint
+bower.json       // the list of your Bower packages
+package.json     // the list of your Node packages
+Gruntfile.js     // where the Grunt magic happens
+					</code></pre>
+					<aside class="notes">
+						This layout is for custom themes. Developers building themes for resale will want to move their Bower and Grunt files into the theme folder itself.
+					</aside>
+				</section>
+
+				<section data-background-transition="slide">
+					<h2>Terminal Setup for Fun++</h2>
+					<ol>
+						<li class="fragment">
+							Get <a href="http://www.iterm2.com/#/section/downloads">iTerm2</a>.
+						</li>
+						<li class="fragment">
+							Install <a href="https://github.com/robbyrussell/oh-my-zsh">OhMyZsh</a> with
+							<pre><code class="zsh" data-trim>
+curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh
+							</code></pre>
+						</li>
+						<li class="fragment">
+							Install <a href="http://brew.sh/">Homebrew</a> with
+							<pre><code class="zsh" data-trim>
+ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)
+							</code></pre>
+						</li>
+						<li class="fragment">
+							Get Homebrew up to date and clean by running <code>brew update</code> and <code>brew doctor</code>, then add it to the path with
+							<pre><code class="zsh" data-trim>
+export PATH="/usr/local/bin:$PATH" >> ~/.bash_profile
+							</code></pre>
+						</li>
+						<li class="fragment">
+							Install Node.js with <code>brew install node</code>
+						</li>
+						<li class="fragment">
+							Install the Grunt CLI with <code>npm install -g grunt-cli</code>
+						</li>
+						<li class="fragment">
+							Install Bower with <code>npm install -g bower</code>
+						</li>
+					</ol>
+
+					<aside class="notes">
+						This assumes you're on a Mac. Homebrew requires xCode to be installed first. If prompted to install Xcode Command Line Tools, choose Yes.
+					</aside>
+				</section>
+
+				<section>
+					<section>
+						<h2>Bower Setup</h2>
+						<p>Create a file called <code>bower.json</code>.</p>
+						<pre><code class="json" data-trim>
+{
+  "name": "your-project-name",
+  "version": "1.0.0",
+  "dependencies": {
+    
+  }
+}
+						</code></pre>
+					</section>
+					<section>
+						<h2>Grunt Setup</h2>
+						<p>Create a file called <code>package.json</code>.</p>
+						<pre><code class="json" data-trim>
+{
+  "name": "your-project",
+  "version": "1.0.0",
+  "dependencies": {
+
+  }
+}
+						</code></pre>
+					</section>
+					<section>
+						<h2>Grunt Configuration</h2>
+						<p>Create a file called <code>Gruntfile.js</code>.</p>
+						<pre><code class="js" data-trim>
+'use strict';
+module.exports = function (grunt) {
+
+  grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
+
+    // package options will go here
+
+  });
+
+  // register tasks here
+  
+  grunt.registerTask('default', [
+    
+    // default actions go here
+		
+  ]);
+
+};
+						</code></pre>
+						<aside class="notes">
+							With this file created, Grunt is up and running. You'll execute it by going to the project directory in the terminal and typing 'grunt'. But, in its current state, it won't actually do anything. This sample configuration doesn't have any packages loaded. Before we load any packages, we need to know what we want Grunt to do for us.
+						</aside>
+					</section>
+				</section>
+
+				<section data-background-transition="linear">
+
+					<section>
+						<h2>Packages</h2>
+						<p>Get the Bower packages you want from their <a href="http://bower.io/search/">registry</a>.</p>
+						<aside class="notes">
+							First think about what you will always need for your project. What frameworks do you use? Bootstrap? Foundation? Font Awesome? jQuery? Zepto? Round these up with Bower (don't forget about the package directory [here](http://sindresorhus.com/bower-components/)). Do you use LESS or SASS? Get those files set up. Then depending on what you need out of these frameworks, you'll configure Grunt to process your CSS, lint and concatenate your JavaScript, and minify both.
+						</aside>
+					</section>
+
+					<section>
+						<h3>CSS Preprocessing</h3>
+						<p>You'll want the <a href="https://github.com/gruntjs/grunt-contrib-less">LESS</a>, <a href="https://github.com/gruntjs/grunt-contrib-compass">SASS</a>, or some other package if your CSS preference is different.</p>
+						<pre><code class="zsh" data-trim>
+npm install grunt-contrib-less --save-dev
+						</code></pre>
+						<p>or</p>
+						<pre><code class="zsh" data-trim>
+npm install grunt-contrib-compass --save-dev
+						</code></pre>
+					</section>
+
+					<section>
+						<h3>JavaScript Linting</h3>
+						<p>Get <a href="https://github.com/stephenmathieson/grunt-jslint">JSLint</a>.</p>
+						<pre><code class="zsh" data-trim>
+npm install grunt-jslint --save-dev
+						</code></pre>
+					</section>
+					<section>
+						<h3>JavaScript File Concatenation</h3>
+						<p>You'll want <a href="https://github.com/gruntjs/grunt-contrib-concat">this</a>.</p>
+						<pre><code class="zsh" data-trim>
+npm install grunt-contrib-concat --save-dev
+						</code></pre>
+					</section>
+					<section>
+						<h3>JavaScript Minification</h3>
+						<p>Get <a href="https://github.com/gruntjs/grunt-contrib-uglify">Uglify</a>.</p>
+						<pre><code class="zsh" data-trim>
+npm install grunt-contrib-uglify --save-dev
+						</code></pre>
+					</section>
+					<section>
+						<h3>Error Notifications</h3>
+						<p>Try <a href="https://github.com/dylang/grunt-notify">Grunt Notify</a>.</p>
+						<pre><code class="zsh" data-trim>
+npm install grunt-notify --save-dev
+						</code></pre>
+					</section>
+					<section>
+						<h3>Image Optimization</h3>
+						<p>I like <a href="https://github.com/gruntjs/grunt-contrib-imagemin">Imagemin</a>.</p>
+						<pre><code class="zsh" data-trim>
+npm install grunt-contrib-imagemin --save-dev
+						</code></pre>
+					</section>
+					<section>
+						<h3>Live Updating</h3>
+						<p>You want to use <a href="https://github.com/gruntjs/grunt-contrib-watch">Watch</a>. For updating CSS and JavaScript in the browser without refreshing the page, get the Chrome extension <a href="https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei?hl=en">LiveReload</a>.</p>
+						<pre><code class="zsh" data-trim>
+npm install grunt-contrib-watch --save-dev
+						</code></pre>
+					</section>
+					<section>
+						<h3>Server</h3>
+						<p>Want to set up a node.js server for your project and ditch MAMP? Get <a href="https://github.com/blai/grunt-express">Express</a>.</p> For WordPress, you'll want the <a href="https://github.com/sindresorhus/grunt-php">PHP version</a>.
+					</section>
+					<aside class="notes">
+						Go ahead and follow the instructions for setting up each of these that you want. Don't worry about configuring them yet, this can be confusing at first and I have a sample I'll show at the end to get you started.
+					</aside>
+				</section>
+
+				<section>
+					<p>With the packages you want registered, the 'Load Tasks' section of your file should look something like this:</p>
+					<pre><code class="js" data-trim>
+// Load tasks
+grunt.loadNpmTasks('grunt-contrib-clean');
+grunt.loadNpmTasks('grunt-contrib-jshint');
+grunt.loadNpmTasks('grunt-contrib-concat');
+grunt.loadNpmTasks('grunt-contrib-uglify');
+grunt.loadNpmTasks('grunt-notify');
+grunt.loadNpmTasks('grunt-contrib-watch');
+grunt.loadNpmTasks('grunt-contrib-imagemin');
+grunt.loadNpmTasks('grunt-contrib-compass');
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Configuring Options</h2>
+					<pre><code class="js" data-trim>
+// package options
+jshint: {
+  options: {
+    jshintrc: '.jshintrc' // jshint config file
+  },
+  all: [
+    'Gruntfile.js',
+    'assets/js/*.js'
+  ]
+},
+concat: {
+  basic: {
+    src: [
+      'bower_components/jquery/dist/jquery.js',
+      'bower_components/foundation/js/foundation/foundation.js',
+      'assets/js/main.js'
+    ],
+    dest: 'tmp/app.js'
+  },
+  extras: {
+    src: [
+      'bower_components/modernizr/modernizr.js'
+    ],
+    dest: 'tmp/modernizr.js'
+  }
+},
+compass: {
+  dist: {
+    options: {
+      config: 'config.rb'
+    }
+  }
+},
+imagemin: {
+  dynamic: {
+    files: [{
+      expand: true,
+      cwd: 'assets/img/',
+      src: ['**/*.{png,jpg,gif}'],
+      dest: 'public/build/img/'
+    }]
+  }
+},
+uglify: {
+  build: {
+    files: {
+      'public/build/js/modernizr.min.js' : 'tmp/modernizr.js',
+      'public/build/js/app.min.js' : 'tmp/app.js'
+    }
+  }
+},
+clean: {
+  dist: [
+    'tmp/**',
+    'public/build/img/**'
+  ]
+},
+					</code></pre>
+					<aside class="notes">
+						Next you'll want to set the options (under the comment 'package options' in the sample file) for each task that will be run. A few things to note here - I'm using a 'tmp' folder to concatenate the JavaScript to, before it's minified. I also have my 'production' files in an `assets` folder outside of the public folder, and everything is processed into a `build` folder inside my public folder. You don't have to do this, but I prefer to keep my source files and processed files separate. 
+						Also, watch your commas. As you nest options, it's easy to miss one.
+					</aside>
+				</section>
+
+				<section>
+					<h2>Watch</h2>
+					<p>A sample configuration:</p>
+					<pre><code class="js" data-trim>
+watch: {
+  compass: {
+    files: ['assets/sass/**/*.{scss,sass}'],
+    tasks: ['compass']
+  },
+  css: {
+    files: ['public/build/css/*'],
+    options: {
+      livereload: true
+    }
+  },
+  js: {
+    files: [
+      'assets/js/*.js'
+    ],
+    tasks: ['concat', 'uglify'],
+    options: {
+      livereload: true,
+      atBegin: true
+    }
+  },
+  imagemin: {
+    files: [
+      'assets/img/**'
+    ],
+    tasks: ['imagemin'],
+    options: {
+      livereload: true,
+      atBegin: true
+    }
+  }
+}
+					</code></pre>
+					<aside class="notes">
+						'Watch' is a very powerful Grunt package that continues to run until you tell it to stop. This is super useful for development tasks like rebuilding your files as you make changes and refreshing the browser.
+						What's happening here is for as long as Grunt Watch is running, it's watching all of our production files and re-running the tasks we tell it to whenever one of those files changes. This can be run with the command `grunt watch`, but there's a simpler way we can incorporate this by including it in our default tasks.
+					</aside>
+				</section>
+
+				<section>
+					<h2>Register Default Tasks</h2>
+					<pre><code class="js" data-trim>
+// Register default tasks
+grunt.registerTask('default', [
+  'watch'
+]);
+					</code></pre>
+					<aside class="notes">
+						Any tasks inside 'default' will be run whenever you run the command 'grunt'. This configuration runs Grunt's 'watch' function. With this, all you need to type to get everything up and running is the simple command 'grunt'.
+					</aside>
+				</section>
+
+				<section>
+					<h2>Putting it All Together</h2>
+					<p>With all of these modules registered and configured, your Gruntfile.js should look something like this:</p>
+					<pre><code class="js" data-trim>
+'use strict';
+module.exports = function (grunt) {
+
+  grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
+
+    // package options
+    jshint: {
+      options: {
+        jshintrc: '.jshintrc'
+      },
+      all: [
+        'Gruntfile.js',
+        'tmp/js/*.js'
+      ]
+    },
+    concat: {
+      basic: {
+        src: [
+          'bower_components/jquery/dist/jquery.js',
+          'bower_components/foundation/js/foundation/foundation.js',
+          'assets/js/main.js'
+        ],
+        dest: 'tmp/app.js'
+      },
+      extras: {
+        src: [
+          'bower_components/modernizr/modernizr.js'
+        ],
+        dest: 'tmp/modernizr.js'
+      }
+    },
+    compass: {
+      dist: {
+        options: {
+          config: 'config.rb'
+        }
+      }
+    },
+    imagemin: {
+      dynamic: {
+        files: [{
+          expand: true,
+          cwd: 'assets/img/',
+          src: ['**/*.{png,jpg,gif}'],
+          dest: 'public/build/img/'
+        }]
+      }
+    },
+    uglify: {
+      build: {
+        files: {
+          'public/build/js/modernizr.min.js' : 'tmp/modernizr.js',
+          'public/build/js/app.min.js' : 'tmp/app.js'
+        }
+      }
+    },
+    clean: {
+      dist: [
+        'tmp/**',
+        'public/build/img/**'
+      ]
+    },
+    watch: {
+      compass: {
+        files: ['assets/sass/**/*.{scss,sass}'],
+        tasks: ['compass']
+      },
+      css: {
+        files: ['public/build/css/*'],
+        options: {
+          livereload: true
+        }
+      },
+      js: {
+        files: [
+          'assets/js/*.js'
+        ],
+        tasks: ['concat', 'uglify'],
+        options: {
+          livereload: true,
+          atBegin: true
+        }
+      },
+      imagemin: {
+        files: [
+          'assets/img/**'
+        ],
+        tasks: ['imagemin'],
+        options: {
+          livereload: true,
+          atBegin: true
+        }
+      }
+    }
+  });
+
+  // Load tasks
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-notify');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-imagemin');
+  grunt.loadNpmTasks('grunt-contrib-compass');
+
+  // Register default tasks
+  grunt.registerTask('default', [
+    'watch'
+  ]);
+
+};
+					</code></pre>
+				</section>
+
+				<section data-background-transition="slide">
+					<h2>Go Play</h2>
+					<aside class="notes">
+						Hopefully this is enough to get you started using Grunt to handle your common tasks and Bower to handle your frameworks and plugins. Grunt is as complex as you want to make it - there is no end to how much you can make it do for you and I've only scratched the surface.
+					</aside>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
