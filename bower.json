@@ -1,0 +1,7 @@
+{
+  "name": "reveal.js",
+  "version": "1.0.0",
+  "dependencies": {
+    "fontawesome": "~4.0.3"
+  }
+}

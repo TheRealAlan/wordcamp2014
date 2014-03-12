@@ -55,6 +55,9 @@ body {
 .reveal h1 {
   font-size: 151px; }
 
+.reveal h3 {
+  margin-top: 40px; }
+
 /*********************************************
  * LINKS
  *********************************************/
@@ -148,6 +151,16 @@ body {
 
 code {
   color: #f57c2c; }
+
+.reveal i {
+  font-family: 'FontAwesome';
+  font-style: normal; }
+
+.codepen-logo {
+  width: 153px;
+  height: 153px;
+  color: #13daec;
+  display: inline-block; }
 
 .reveal p {
   font-weight: 300;
