@@ -86,7 +86,7 @@
 							<li class="fragment">LESS, SASS, Stylus</li>
 							<li class="fragment">CoffeeScript, LiveScript</li>
 							<li class="fragment">WordPress Plugins, GUI Apps - CodeKit, Koala, Hammer</li>
-							<li class="fragment">MAMP, LAMP, XAMPP</li>
+							<li class="fragment">MAMP, LAMP, XAMPP, AMPPS, Vagrant</li>
 						</ul>
 					</section>
 				</section>
@@ -112,6 +112,7 @@
 						<li class="fragment">Portable with Project</li>
 						<li class="fragment">Configurable for Multiple Environments (dev, dist)</li>
 						<li class="fragment">Every Detail is Customizable</li>
+            <li class="fragment">It's Free</li>
 					</ul>
 				</section>
 
@@ -129,6 +130,7 @@ tmp              // holds concatenated js to lint
 bower.json       // the list of your Bower packages
 package.json     // the list of your Node packages
 Gruntfile.js     // where the Grunt magic happens
+.jshintrc        // your JS Hint config file (optional)
 					</code></pre>
 					<aside class="notes">
 						This layout is for custom themes. Developers building themes for resale will want to move their Bower and Grunt files into the theme folder itself.
@@ -177,7 +179,7 @@ export PATH="/usr/local/bin:$PATH" >> ~/.bash_profile
 
 				<section>
 					<section>
-						<h2>Bower Setup</h2>
+						<h2>Bower Packages</h2>
 						<p>Create a file called <code>bower.json</code>.</p>
 						<pre><code class="json" data-trim>
 {
@@ -190,7 +192,7 @@ export PATH="/usr/local/bin:$PATH" >> ~/.bash_profile
 						</code></pre>
 					</section>
 					<section>
-						<h2>Grunt Setup</h2>
+						<h2>Node (Grunt) Packages</h2>
 						<p>Create a file called <code>package.json</code>.</p>
 						<pre><code class="json" data-trim>
 {
@@ -447,8 +449,8 @@ grunt.registerTask('default', [
 					<h2>Putting it All Together</h2>
 					<p>With all of these modules registered and configured, your Gruntfile.js should look something like this:</p>
 					<pre><code class="js" data-trim>
-'use strict';
 module.exports = function (grunt) {
+  'use strict';
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
